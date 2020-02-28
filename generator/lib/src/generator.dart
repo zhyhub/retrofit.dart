@@ -62,7 +62,6 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
     final className = element.name;
     final name = '_$className';
     clientAnnotation = retrofit.RestApi(
-      autoCastResponse: (annotation?.peek('autoCastResponse')?.boolValue),
       baseUrl: (annotation?.peek(_baseUrlVar)?.stringValue ?? ''),
     );
     final baseUrl = clientAnnotation.baseUrl;
@@ -104,9 +103,14 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
           ..name = _baseUrlVar
           ..toThis = true));
         final block = [
-          Code('''ArgumentError.checkNotNull($_dioVar,'$_dioVar');'''),
+          refer('ArgumentError')
+              .property('checkNotNull')
+              .call([refer(_dioVar), literalString(_dioVar)]).statement,
           if (url != null && url.isNotEmpty)
-            Code('this.${_baseUrlVar} ??= ${literal(url)};'),
+            refer('this')
+                .property(_baseUrlVar)
+                .assignNullAware(literal(url))
+                .statement
         ];
 
         c.body = Block.of(block);
@@ -268,8 +272,10 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
         p.isRequiredPositional ||
         p.metadata.firstWhere((meta) => meta.isRequired, orElse: () => null) !=
             null)) {
-      blocks.add(Code(
-          '''ArgumentError.checkNotNull(${parameter.displayName},'${parameter.displayName}');'''));
+      blocks.add(refer('ArgumentError').property('checkNotNull').call([
+        refer(parameter.displayName),
+        literalString(parameter.displayName)
+      ]).statement);
     }
 
     _generateExtra(m, blocks, _localExtraVar);
@@ -336,11 +342,17 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
     if (wrapperedReturnType == null ||
         'void' == wrapperedReturnType.toString()) {
       blocks.add(
-        refer('await $_dioVar.request')
+        refer(_dioVar)
+            .property('request')
             .call([path], namedArguments, [refer('void')])
+            .awaited
             .statement,
       );
-      blocks.add(Code('return Future.value(null);'));
+      blocks.add(refer('Future')
+          .property('value')
+          .call([literalNull])
+          .returned
+          .statement);
       return Block.of(blocks);
     }
 
@@ -352,8 +364,11 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
     if (returnType == null || 'void' == returnType.toString()) {
       if (isWrappered) {
         blocks.add(
-          refer('final $_resultVar = await $_dioVar.request')
+          refer(_dioVar)
+              .property('request')
               .call([path], namedArguments, [refer('void')])
+              .awaited
+              .assignFinal(_resultVar)
               .statement,
         );
         blocks.add(Code('''
@@ -362,11 +377,17 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
       '''));
       } else {
         blocks.add(
-          refer('await $_dioVar.request')
+          refer(_dioVar)
+              .property('request')
               .call([path], namedArguments, [refer('void')])
+              .awaited
               .statement,
         );
-        blocks.add(Code('return Future.value(null);'));
+        blocks.add(refer('Future')
+            .property('value')
+            .call([literalNull])
+            .returned
+            .statement);
       }
     } else {
       final innerReturnType = _getResponseInnerType(returnType);
@@ -374,20 +395,29 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
           _typeChecker(BuiltList).isExactlyType(returnType)) {
         if (_isBasicType(innerReturnType)) {
           blocks.add(
-            refer('await $_dioVar.request')
+            refer(_dioVar)
+                .property('request')
                 .call([path], namedArguments)
+                .awaited
                 .assignFinal(_resultVar, refer('Response<List<dynamic>>'))
                 .statement,
           );
-          blocks.add(
-              Code('final value = $_resultVar.data.cast<$innerReturnType>();'));
+          blocks.add(refer(_resultVar)
+              .property('data')
+              .property('cast')
+              .call([], {}, [refer(innerReturnType.getDisplayString())])
+              .assignFinal('value')
+              .statement);
         } else {
           blocks.add(
-            refer('await $_dioVar.request')
+            refer(_dioVar)
+                .property('request')
                 .call([path], namedArguments)
+                .awaited
                 .assignFinal(_resultVar, refer('Response<List<dynamic>>'))
                 .statement,
           );
+
           blocks.add(Code(
               'var value = $_resultVar.data.map((dynamic i) => $innerReturnType.fromJson(i as Map<String,dynamic>)).toList();'));
         }
@@ -395,8 +425,10 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
           _typeChecker(BuiltMap).isExactlyType(returnType)) {
         final types = _getResponseInnerTypes(returnType);
         blocks.add(
-          refer('await $_dioVar.request')
+          refer(_dioVar)
+              .property('request')
               .call([path], namedArguments)
+              .awaited
               .assignFinal(_resultVar, refer('Response<Map<String,dynamic>>'))
               .statement,
         );
@@ -426,26 +458,39 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
             '''));
           }
         } else {
-          blocks.add(Code('final value = $_resultVar.data;'));
+          blocks.add(refer(_resultVar)
+              .property('data')
+              .assignFinal('value')
+              .statement);
         }
       } else {
         if (_isBasicType(returnType)) {
           blocks.add(
-            refer('await $_dioVar.request')
+            refer(_dioVar)
+                .property('request')
                 .call([path], namedArguments)
+                .awaited
                 .assignFinal(_resultVar, refer('Response<$returnType>'))
                 .statement,
           );
-          blocks.add(Code('final value = $_resultVar.data;'));
+          blocks.add(refer(_resultVar)
+              .property('data')
+              .assignFinal('value')
+              .statement);
         } else {
           blocks.add(
-            refer('await $_dioVar.request')
+            refer(_dioVar)
+                .property('request')
                 .call([path], namedArguments)
+                .awaited
                 .assignFinal(_resultVar, refer('Response<Map<String,dynamic>>'))
                 .statement,
           );
-          blocks.add(
-              Code('final value = $returnType.fromJson($_resultVar.data);'));
+          blocks.add(refer(returnType.getDisplayString())
+              .property('fromJson')
+              .call([refer(_resultVar).property('data')])
+              .assignFinal('value')
+              .statement);
         }
       }
       if (isWrappered) {
@@ -454,7 +499,11 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
       return Future.value(httpResponse);
       '''));
       } else {
-        blocks.add(Code('return Future.value(value);'));
+        blocks.add(refer('Future')
+            .property('value')
+            .call([refer('value')])
+            .returned
+            .statement);
       }
     }
 
