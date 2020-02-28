@@ -29,7 +29,7 @@ class _BaseUrl implements BaseUrl {
   String baseUrl;
 }
 ''', contains: true)
-@RestApi(baseUrl: "http://httpbin.org/")
+@RestApi(baseUrl: 'http://httpbin.org/')
 abstract class BaseUrl {}
 
 @ShouldGenerate(
@@ -82,9 +82,9 @@ class CustomConstant {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpGetTest {
-  @GET("/get")
+  @GET('/get')
   Future<String> ip();
 }
 
@@ -95,9 +95,9 @@ abstract class HttpGetTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPostTest {
-  @POST("/post")
+  @POST('/post')
   Future<String> ip();
 }
 
@@ -108,9 +108,9 @@ abstract class HttpPostTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPutTest {
-  @PUT("/put")
+  @PUT('/put')
   Future<String> ip();
 }
 
@@ -121,9 +121,9 @@ abstract class HttpPutTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpDeleteTest {
-  @DELETE("/delete")
+  @DELETE('/delete')
   Future<String> ip();
 }
 
@@ -134,9 +134,9 @@ abstract class HttpDeleteTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPatchTest {
-  @PATCH("/delete")
+  @PATCH('/delete')
   Future<String> ip();
 }
 
@@ -146,9 +146,9 @@ abstract class HttpPatchTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FormUrlEncodedTest {
-  @POST("/get")
+  @POST('/get')
   @FormUrlEncoded()
   Future<String> ip();
 }
@@ -162,9 +162,9 @@ abstract class FormUrlEncodedTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() File image);
 }
 
@@ -177,9 +177,9 @@ abstract class FilePartTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartWithCustomNameTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part('image', 'my_profile_image.jpg') File image);
 }
 
@@ -192,9 +192,9 @@ abstract class FilePartWithCustomNameTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class UploadFileInfoPartTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() File image);
 }
 
@@ -205,9 +205,9 @@ abstract class UploadFileInfoPartTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class GenericCast {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<User> getUser();
 }
 
@@ -228,9 +228,9 @@ class User {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class GenericCastBasicType {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<String> getUser();
 }
 
@@ -241,9 +241,9 @@ abstract class GenericCastBasicType {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestObjectBody {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(@Body() User user);
 }
 
@@ -258,12 +258,12 @@ class CustomObject {
 ''',
     contains: true,
     expectedLogItems: [
-      "CustomObject must provide a `toJson()` method which return a Map.\n"
-          "It is programmer's responsibility to make sure the CustomObject is properly serialized",
+      'CustomObject must provide a `toJson()` method which return a Map.\n'
+          'You should make sure the CustomObject is properly serialized.'
     ])
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestCustomObjectBody {
-  @POST("/custom-object")
+  @POST('/custom-object')
   Future<String> createCustomObject(@Body() CustomObject customObject);
 }
 
@@ -278,9 +278,9 @@ abstract class TestCustomObjectBody {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>> getResult();
 }
 
@@ -291,9 +291,9 @@ abstract class TestMapBody {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>> getResult();
 }
 
@@ -304,9 +304,9 @@ abstract class TestMapBody2 {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListString {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<String>> getResult();
 }
 
@@ -317,9 +317,9 @@ abstract class TestBasicListString {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListBool {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<bool>> getResult();
 }
 
@@ -330,9 +330,9 @@ abstract class TestBasicListBool {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListInt {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<int>> getResult();
 }
 
@@ -343,41 +343,41 @@ abstract class TestBasicListInt {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListDouble {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<double>> getResult();
 }
 
 @ShouldGenerate(
-  "cancelToken: cancelToken",
+  'cancelToken: cancelToken',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestCancelToken {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
       @Body() User user, @CancelRequest() CancelToken cancelToken);
 }
 
 @ShouldGenerate(
-  "onSendProgress: onSendProgress",
+  'onSendProgress: onSendProgress',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestSendProgress {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
       @Body() User user, @SendProgress() ProgressCallback onSendProgress);
 }
 
 @ShouldGenerate(
-  "onReceiveProgress: onReceiveProgress",
+  'onReceiveProgress: onReceiveProgress',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestReceiveProgress {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
       @Body() User user, @ReceiveProgress() ProgressCallback onReceiveProgress);
 }
@@ -386,9 +386,9 @@ abstract class TestReceiveProgress {
         options: RequestOptions(
             method: 'HEAD',
 ''', contains: true)
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestHeadMethod {
-  @HEAD("/")
+  @HEAD('/')
   Future<String> testHeadMethod();
 }
 
@@ -396,9 +396,9 @@ abstract class TestHeadMethod {
         options: RequestOptions(
             method: 'OPTIONS',
 ''', contains: true)
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestOptionsMethod {
-  @OPTIONS("/")
+  @OPTIONS('/')
   Future<String> testOptionsMethod();
 }
 
@@ -407,7 +407,7 @@ abstract class TestOptionsMethod {
 ''', contains: true)
 @RestApi()
 abstract class TestHttpResponseVoid {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<void>> noResponseData();
 }
 
@@ -416,7 +416,7 @@ abstract class TestHttpResponseVoid {
 ''', contains: true)
 @RestApi()
 abstract class TestHttpResponseObject {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<Map<String, dynamic>>> responseWithObject();
 }
 
@@ -425,7 +425,7 @@ abstract class TestHttpResponseObject {
 ''', contains: true)
 @RestApi()
 abstract class TestHttpResponseArray {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<List<String>>> responseWithArray();
 }
 
@@ -443,10 +443,10 @@ abstract class TestHttpResponseArray {
 ''', contains: true)
 @RestApi()
 abstract class TestFileList {
-  @POST("/")
+  @POST('/')
   Future<void> testFileList(@Part() List<File> files);
 
-  @POST("/")
+  @POST('/')
   Future<void> testOptionalFile({@Part() File file});
 }
 
@@ -460,16 +460,16 @@ abstract class TestFileList {
 @ShouldGenerate(r'''{'map': map}''', contains: true)
 @RestApi()
 abstract class TestModelList {
-  @POST("/")
+  @POST('/')
   Future<void> testUserList(@Part() List<User> users);
 
-  @POST("/")
-  Future<void> testUser(@Part("item") User user);
+  @POST('/')
+  Future<void> testUser(@Part('item') User user);
 
-  @POST("/")
+  @POST('/')
   Future<void> testListMap(@Part() List<Map<String, dynamic>> mapList);
 
-  @POST("/")
+  @POST('/')
   Future<void> testMap(@Part() Map<String, dynamic> map);
 }
 
@@ -508,6 +508,6 @@ abstract class TestModelList {
 ''', contains: true)
 @RestApi()
 abstract class CustonOptions {
-  @GET("")
+  @GET('')
   Future<void> testOptions(@DioOptions() Options options);
 }
